@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar Conta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <a href="/estoque_admin"><button type="button">Sair</button></a>
+    <form method="POST" action = "/criar_conta">
+        <h1>Criar uma conta</h1>
+
+        <p>Nome:</p>
+        <input type = "text" name="nome">
+
+        <p>Perfil do Usuário</p>
+
+        <div class="radio">
+            <label>
+                Adm
+                <input type="radio" name="perfil" value = "adm">
+            </label>
+
+            <label>
+                Comum
+                <input type="radio" name="perfil" value = "comum">
+            </label>
+        </div>
+
+        <p>Cpf</p>
+        <p>Número minímo de caracteres é igual a 11</p>
+        <input name = "cpf" type="number"  max="99999999999" >
+
+        <p>Senha:</p>
+        <p>Número minímo de caracteres é igual a 5</p>
+        <input type="text" name = "senha">
+
+        <p>Confirmar Senha:</p>
+        <p>Número minímo de caracteres é igual a 5</p>
+        <input type="text" name = "confirmar_senha">
+
+        <button >Confirmar</button>
+
+
+
+    </form>
+    {% with mensagens_conta = get_flashed_messages()%}
+            {% if mensagens_conta %}
+                {%for mensagem_conta in mensagens_conta%}
+                    <p>{{mensagem_conta}}</p>
+
+                {% endfor %}
+
+            {% endif %}
+
+    {% endwith %}
+</body>
+</html>

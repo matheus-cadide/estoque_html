@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Excluir cadastro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Excluir Cadastro de Funcionário</h1> <a href="/estoque_admin"><button type="button"><p>Sair</p></button></a>
+    <br>
+
+    <form method="post" action="/visualizar_cadastro_cpf_funcionario">
+        <p>Nome:</p>
+        <input name = "nome" type="text">
+
+        <p>Cpf:</p>
+        <input type="number" name="cpf" min="11111111111" max = "99999999999">
+
+
+
+        <button type="submit">Confirmar</button>
+
+
+
+    </form>
+
+    <form method="post" action = "/excluir_cadastro_funcionario">
+
+        <input type="hidden" name="nome_funcionario" value="{{nome}}">
+        <input type="hidden" name="cpf_funcionario" value="{{cpf}}">
+
+        {%with mensagens = get_flashed_messages()%}
+            {%if mensagens%}
+                {%for funcionario in mensagens%}
+                    <p>Nome: {{funcionario[0]}}, Cpf: {{funcionario[1]}}, Senha:{{funcionario[2]}}, Perfil: {{funcionario[3]}}</p>
+                    <button type="submit">Excluir</button>
+                {%endfor%}
+            {%endif%}
+        {% endwith %}
+
+        <p>{{mensagem}}<p>
+
+    </form>
+
+
+</body>
+</html>
