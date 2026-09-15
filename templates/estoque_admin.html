@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Estoque</h1>
+    <div class="botoes">
+        <a href = "/sair"><button type="submit">Sair</button></a>
+        <button onclick="mostrar_campo('campo_cadastrar_produto')">Cadastrar Produto</button>  <button onclick="mostrar_campo('campo_editar_produto')">Editar Produto</button> <button onclick="mostrar_campo('campo_excluir_produto')">Excluir Produto</button>
+        <br>
+        <br>
+
+
+        <a href="/mostrar_estoque_html"><button type="button">Visualizar Estoque</button></a>
+        <a href="/mostrar_avisos"><button onclick="mostrar_campo('mostrar_avisos_campo')" type="button">Mostrar Avisos</button></a>
+    </div>
+
+
+    <h1>Funcionários</h1>
+    <div class="botoes">
+        <a href="/criar_conta"><button type="button">Cadastrar Funcionários</button></a>
+        <a href = "/visualizar_cadastro_funcionario"><button type="button">Visualizar cadastro de funcionários</button></a>
+        <br><br>
+        <a href="/excluir_cadastro_funcionario_pagina"><button type="button">Excluir cadastro funcionario</button></a>
+    </div>
+
+
+    <form method="post" action = "/cadastrar_produto">
+        <div id="campo_cadastrar_produto" style="display : none;">
+            <h3>Cadastro de Produto</h3>
+
+            <p>Nome do Produto:</p>
+            <input name = "nome_produto_cadastrar" placeholder="Digite o nome do produto" type="text" required>
+
+            <p>Quantidade:</p>
+            <input name = "quantidade_produto_cadastrar" placeholder="Digite a quantidade" type="number" step = "0.001" required>
+
+            <p>Quantidade Mínima Em Estoque</p>
+            <input name="quantidade_minima_cadastrar" placeholder="Digite a quantidade mínima" step="0.001" required>
+
+            <p>Preço:</p>
+            <input name="preco_produto_cadastrar" placeholder="Digite o preço" type="number" step = "0.01" required>
+
+            <p>Código:</p>
+            <input name="codigo_produto_cadastrar" placeholder="Digite o código" type="number" min="0" required>
+            <button type="submit" name="cadastrar">Cadastrar</button>
+
+
+
+        </div>
+    </form>
+
+
+
+    <div id = "campo_editar_produto" style="display: none;">
+        <form method="post" action="/escolha_update">
+
+
+            <p>Nome Produto:</p>
+
+            <input name = "nome_produto_antigo" placeholder="Digite o nome do produto para ser alterado">
+            <br><br>
+            <button type="submit" name = "botao" value="novo_nome">Novo Nome</button>
+            <br>
+            <button type="submit" name = "botao" value="nova_quantidade">Nova Quantidade</button>
+            <br>
+            <button type="submit" name = "botao" value="novo_preco">Novo Preço</button>
+            <br>
+            <button type="submit" name = "botao" value = "novo_codigo">Novo Código</button>
+            <br>
+            <button type="submit" name = "botao" value = "nova_quantidade_minima">Nova Quantidade Miníma</button>
+        </form>
+
+
+
+    </div>
+    <form method="post" action="/alterar_produto">
+
+            <input type="hidden" name="nome_produto" value="{{nome_produto}}">
+
+            {%if escolha == 'novo_nome'%}
+                <p>Novo Nome</p>
+                <input name="nome_novo" placeholder="Digite o novo nome" type="text" required>
+                <br>
+                <button type="submit">Alterar</button>
+            {%endif%}
+
+            {%if escolha == 'nova_quantidade'%}
+
+                <p>Nova Quantidade:</p>
+                <input name = "quantidade_nova" placeholder="Digite a nova quantidade do produto" type="number" step = "0.01" required>
+                <br>
+                <button type="submit">Alterar</button>
+            {%endif%}
+
+            {%if escolha == 'novo_preco'%}
+                <p>Preço:</p>
+                <input name = "preco_novo" type="number" placeholder="Digite o novo preço do produto" step="0.01" required>
+                <br>
+                <button type="submit">Alterar</button>
+            {%endif%}
+
+            {%if escolha == 'novo_codigo'%}
+                <p>Código</p>
+                <input name = "codigo_novo" type="number" placeholder="Digite o código" required>
+                <button type="submit">Alterar</button>
+            {%endif%}
+
+            {%if escolha == 'nova_quantidade_minima'%}
+                <p>Quantidade Mínima</p>
+                <input name = "nova_quantidade_minima" type="number" placeholder="Digite a quantidade mínima" step="0" required>
+                <button type="submit">Alterar</button>
+            {%endif%}
+    </form>
+
+
+
+
+    <form method="post" action = "/excluir_produto_html">
+        <div id = "campo_excluir_produto" style="display :none;">
+            <h2>Excluir Produto</h2>
+            <p>Nome do Produto</p>
+            <input name = "nome_produto_excluido">
+            <button type="submit">Excluir</button>
+
+        </div>
+    </form>
+
+
+
+    <div class="aviso">
+        {%if mensagem%}
+            <h2>{{mensagem}}</h2>
+            <p>{{avisos | safe}}</p>
+        {%endif%}
+
+    </div>>
+    <div class="estoque">
+        {% if estoque != "Estoque vazio"%}
+
+            {%for produto in estoque%}
+
+                <p><strong>Nome: {{produto[0]}}, Código: {{produto[1]}}, Quantidade: {{produto[2]}}, Quantidade Mínima Em Estoque: {{produto[3]}}, Preço: R${{"%.2f"|format(produto[2]) }}</strong></p>
+
+            {%endfor%}
+
+
+        {%endif%}
+
+         {%if estoque == "Estoque vazio"%}
+                <p>Estoque Vazio</p>
+         {%endif%}
+    </div>
+
+    <div class="mensagem">
+        <p>{{produto_excluido}}</p>
+        {% with mensagens_estoque = get_flashed_messages()%}
+            {% if mensagens_estoque %}
+                {%for mensagem_estoque in mensagens_estoque%}
+                    <p>{{mensagem_estoque}}</p>
+
+                {% endfor %}
+
+            {% endif %}
+
+        {% endwith %}
+    </div>
+    <script>
+        function mostrar_campo(id){
+             document.getElementById(id).style.display = "block";
+        }
+    </script>
+</body>
+</html>

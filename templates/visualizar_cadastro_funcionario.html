@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Mostrar Cadastro de Funcionário</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<h1>Funcionários</h1>                          <a href="/estoque_admin"><button type = "button">Sair</button></a>
+    <div class="estoque">
+        {% with funcionarios_lista = get_flashed_messages()%}
+            {% if funcionarios_lista %}
+                {%for funcionarios in funcionarios_lista%}
+                    {%for funcionario in funcionarios%}
+
+                        <p>Nome: {{funcionario[0]}}, Cpf: {{funcionario[1]}}, Senha: {{funcionario[2]}}, Perfil: {{funcionario[3]}}</p>
+                        <br>
+
+                    {% endfor %}
+                {% endfor %}
+
+            {% endif %}
+            {%if not funcionarios_lista%}
+                <p>Não há funcionários cadastrados</p>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

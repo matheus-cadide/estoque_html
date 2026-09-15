@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Estoque</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Estoque</h1>
+
+    <a href="/mostrar_estoque_comum"><button type="button">Visualizar Estoque</button></a>    <button type="submit"  onclick="mostrar_campo('entrada_produtos_campo')">Entrada de produtos</button> <button type="submit" onclick="mostrar_campo('retirada_produtos_campo')">Retirada de Produtos</button>
+    <a href = "/sair"><button type="button">Sair</button></a>
+
+    <form method="post" action="/entrada_produtos">
+        <div id = "entrada_produtos_campo" style="display:none">
+            <h2>Entrada de Produtos</h2>
+            <p>Nome do produto:</p>
+            <input type="text" name="nome">
+            <p>Quantidade que chegou:</p>
+            <input type="number" name="quantidade" >
+            <button type="submit">Confirmar</button>
+        </div>
+    </form>
+    <form method="post" action="retirada_produtos">
+        <div id = retirada_produtos_campo style="display:none">
+            <h2>Retirada de Produtos</h2>
+            <p>Nome do produto:</p>
+            <input type="text" name="nome">
+
+            <p>Quantidade retirada:</p>
+            <input type="number" name="quantidade" >
+
+            <button type="submit">Confirmar</button>
+
+
+        </div>
+    </form>
+    <div class = "estoque">
+        {%if estoque != "Estoque vazio"%}
+
+            {%for produto in estoque %}
+
+
+                <p>Nome: {{produto[0]}}, Quantidade: {{produto[2]}}, Preço: {{produto[4]}}</p>
+
+            {%endfor%}
+        {%endif%}
+        {%if estoque == "Estoque vazio"%}
+                <p>Estoque Vazio</p>
+        {%endif%}
+
+    </div>
+
+    <div class="mensagem">
+        {%with mensagens = get_flashed_messages()%}
+            {% if mensagens %}
+                {%for mensagem in mensagens%}
+                <p>{{mensagem}}</p>
+
+                {%endfor%}
+            {%endif%}
+        {%endwith%}
+    </div>
+
+    <script>
+        function mostrar_campo(id){
+             document.getElementById(id).style.display = "block";
+        }
+    </script>
+</body>
+</html>
